@@ -35,7 +35,8 @@
       [center requestAuthorizationWithOptions:(authorizationOptions) completionHandler:^(BOOL granted, NSError * _Nullable error) {
         if (!granted || error != nil) {
           completionHandler(PermissionStatusDenied);
-          return;
+        } else {
+          completionHandler(PermissionStatusGranted);
         }
       }];
     } else {
@@ -45,9 +46,9 @@
       notificationTypes |= UIUserNotificationTypeBadge;
       UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
       [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+      [[UIApplication sharedApplication] registerForRemoteNotifications];
+      completionHandler(PermissionStatusGranted);
     }
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-    completionHandler(PermissionStatusGranted);
   });
 }
 
